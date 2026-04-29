@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloader Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ڕەنگی بنەڕەتی بۆ ئەوەی سپی نەبێت */
+        :root {
+            --bg: #0b0e14;
+            --card-bg: #1a1f26;
+            --text: #e4e6eb;
+            --primary: #0088cc;
+        }
+
+        body {
+            background-color: #0b0e14; /* یەکسەر ڕەش دەبێت */
+            color: #e4e6eb;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 15px;
+            transition: 0.3s;
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .top-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 500px;
+        }
+
+        .channel-btn {
+            background: linear-gradient(45deg, #0088cc, #00c6ff);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(0,136,204,0.3);
+        }
+
+        .app-card {
+            background: #1a1f26;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-right: 5px solid var(--primary);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .app-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .app-info i { font-size: 28px; }
+        .app-name { font-size: 17px; font-weight: bold; }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            background: #0b0e14;
+            color: #fff;
+            outline: none;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .dl-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: #1a1f26;
+            border-radius: 15px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        a { color: #0088cc; text-decoration: none; }
+        
+        /* دۆخی ڕووناک */
+        [data-theme="light"] {
+            --bg: #f0f2f5;
+            --card-bg: #ffffff;
+            --text: #1c1e21;
+        }
+        [data-theme="light"] body { background-color: #f0f2f5; color: #1c1e21; }
+        [data-theme="light"] .app-card, [data-theme="light"] .footer { background: #ffffff; }
+        [data-theme="light"] input { background: #fff; color: #000; border: 1px solid #ccc; }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <div class="header">
+        <div class="top-bar">
+            <button onclick="toggleTheme()" id="themeBtn" style="background:none; border:1px solid #444; color:inherit; padding:8px; border-radius:50%; cursor:pointer;">☀️</button>
+            <a href="https://t.me/liZz4rd_01" class="channel-btn">کەناڵی بۆت</a>
+            <button onclick="toggleLang()" id="langBtn" style="background:none; border:1px solid #444; color:inherit; padding:8px; border-radius:10px; cursor:pointer;">EN</button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="app-card" style="border-right-color: #FF0000;">
+            <div class="app-info"><i class="fab fa-youtube" style="color:#FF0000;"></i><div class="app-name" data-ku="داگرتن لە یوتوب" data-en="YouTube">داگرتن لە یوتوب</div></div>
+            <input type="text" placeholder="Link..." id="yt-url">
+            <button class="dl-btn" onclick="dl('yt-url')">داگرتن</button>
+        </div>
+
+        <div class="app-card" style="border-right-color: #fff;">
+            <div class="app-info"><i class="fab fa-tiktok"></i><div class="app-name" data-ku="داگرتن لە تیکتۆک" data-en="TikTok">داگرتن لە تیکتۆک</div></div>
+            <input type="text" placeholder="Link..." id="tt-url">
+            <button class="dl-btn" onclick="dl('tt-url')">داگرتن</button>
+        </div>
+
+        <div class="app-card" style="border-right-color: #FFFC00;">
+            <div class="app-info"><i class="fab fa-snapchat" style="color:#FFFC00;"></i><div class="app-name" data-ku="داگرتن لە سناپچات" data-en="Snapchat">داگرتن لە سناپچات</div></div>
+            <input type="text" placeholder="Link..." id="sc-url">
+            <button class="dl-btn" onclick="dl('sc-url')">داگرتن</button>
+        </div>
+
+        <div class="app-card" style="border-right-color: #E1306C;">
+            <div class="app-info"><i class="fab fa-instagram" style="color:#E1306C;"></i><div class="app-name" data-ku="داگرتن لە ئینستاگرام" data-en="Instagram">داگرتن لە ئینستاگرام</div></div>
+            <input type="text" placeholder="Link..." id="ig-url">
+            <button class="dl-btn" onclick="dl('ig-url')">داگرتن</button>
+        </div>
+
+        <div class="app-card" style="border-right-color: #BD081C;">
+            <div class="app-info"><i class="fab fa-pinterest" style="color:#BD081C;"></i><div class="app-name" data-ku="داگرتن لە پینترێست" data-en="Pinterest">داگرتن لە پینترێست</div></div>
+            <input type="text" placeholder="Link..." id="pin-url">
+            <button class="dl-btn" onclick="dl('pin-url')" style="background:#BD081C;">داگرتن</button>
+        </div>
+
+        <div class="app-card" style="border-right-color: #1DA1F2;">
+            <div class="app-info"><i class="fab fa-twitter" style="color:#1DA1F2;"></i><div class="app-name" data-ku="داگرتن لە تویتەر" data-en="Twitter (X)">داگرتن لە تویتەر</div></div>
+            <input type="text" placeholder="Link..." id="tw-url">
+            <button class="dl-btn" onclick="dl('tw-url')">داگرتن</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p id="f1">ئەکاونتی پەیوەندی</p>
+        <a href="https://t.me/Roben_01">@Roben_01</a>
+        <p id="f2" style="margin-top:10px;">سایتی ئێمە</p>
+        <a href="https://mustafa-agency.tiiny.site">mustafa-agency.tiiny.site</a>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const b = document.body;
+            const t = b.getAttribute('data-theme');
+            b.setAttribute('data-theme', t === 'dark' ? 'light' : 'dark');
+            document.getElementById('themeBtn').innerText = t === 'dark' ? '🌙' : '☀️';
+        }
+
+        let l = 'ku';
+        function toggleLang() {
+            l = l === 'ku' ? 'en' : 'ku';
+            document.documentElement.dir = l === 'ku' ? 'rtl' : 'ltr';
+            document.getElementById('langBtn').innerText = l === 'ku' ? 'EN' : 'KU';
+            document.querySelectorAll('.app-name').forEach(e => e.innerText = e.getAttribute('data-' + l));
+            document.getElementById('f1').innerText = l === 'ku' ? 'ئەکاونتی پەیوەندی' : 'Contact Account';
+            document.getElementById('f2').innerText = l === 'ku' ? 'سایتی ئێمە' : 'Our Website';
+        }
+
+        async function dl(id) {
+            const u = document.getElementById(id).value;
+            if(!u) return alert("Please paste link!");
+            alert("Processing...");
+            try {
+                const r = await fetch('https://api.cobalt.tools/api/json', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ url: u })
+                });
+                const d = await r.json();
+                if(d.url) window.location.href = d.url;
+                else alert("Error!");
+            } catch(e) { alert("Server Error!"); }
+        }
+    </script>
+</body>
+</html>
